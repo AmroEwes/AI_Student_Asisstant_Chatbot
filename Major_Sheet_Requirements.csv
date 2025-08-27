@@ -1,0 +1,129 @@
+﻿Major,AREA_OF_STUDY,Required_Credits,Required_Courses
+Accounting,GE,42,14
+Accounting,MR,21,7
+Accounting,ME,15,5
+Accounting,EB,0,0
+Accounting,CR,33,11
+Accounting,FE,9,3
+Accounting,MFU,0,0
+Accounting,EFU,0,0
+Finance,GE,42,14
+Finance,MR,21,7
+Finance,ME,15,5
+Finance,EB,0,0
+Finance,CR,33,11
+Finance,FE,9,3
+Finance,MFU,0,0
+Finance,EFU,0,0
+Marketing,GE,42,14
+Marketing,MR,21,7
+Marketing,ME,15,5
+Marketing,EB,0,0
+Marketing,CR,33,11
+Marketing,FE,9,3
+Marketing,MFU,0,0
+Marketing,EFU,0,0
+International Business,GE,42,14
+International Business,MR,21,7
+International Business,ME,15,5
+International Business,EB,0,0
+International Business,CR,33,11
+International Business,FE,9,3
+International Business,MFU,0,0
+International Business,EFU,0,0
+Management Information Systems,GE,42,14
+Management Information Systems,MR,21,7
+Management Information Systems,ME,15,5
+Management Information Systems,EB,0,0
+Management Information Systems,CR,33,11
+Management Information Systems,FE,9,3
+Management Information Systems,MFU,0,0
+Management Information Systems,EFU,0,0
+Mgmt & Organizational Behavior,GE,42,14
+Mgmt & Organizational Behavior,MR,21,7
+Mgmt & Organizational Behavior,ME,15,5
+Mgmt & Organizational Behavior,EB,0,0
+Mgmt & Organizational Behavior,CR,33,11
+Mgmt & Organizational Behavior,FE,9,3
+Mgmt & Organizational Behavior,MFU,0,0
+Mgmt & Organizational Behavior,EFU,0,0
+Computer Science,GE,44,16
+Computer Science,MR,61,20
+Computer Science,ME,12,4
+Computer Science,EB,0,0
+Computer Science,CR,0,0
+Computer Science,FE,9,3
+Computer Science,MFU,0,0
+Computer Science,EFU,0,0
+Public relations & Advertising,GE,42,14
+Public relations & Advertising,MR,30,10
+Public relations & Advertising,ME,18,6
+Public relations & Advertising,EB,0,0
+Public relations & Advertising,CR,15,5
+Public relations & Advertising,FE,15,5
+Public relations & Advertising,MFU,0,0
+Public relations & Advertising,EFU,0,0
+English Education,GE,42,14
+English Education,MR,15,5
+English Education,ME,,
+English Education,EB,0,0
+English Education,CR,,
+English Education,FE,,
+English Education,MFU,0,0
+English Education,EFU,0,0
+Eng- Linguistics - Translation,GE,42,14
+Eng- Linguistics - Translation,MR,21,7
+Eng- Linguistics - Translation,ME,,
+Eng- Linguistics - Translation,EB,0,0
+Eng- Linguistics - Translation,CR,,
+Eng- Linguistics - Translation,FE,9,3
+Eng- Linguistics - Translation,MFU,0,0
+Eng- Linguistics - Translation,EFU,0,0
+English Literature,GE,42,14
+English Literature,MR,18,6
+English Literature,ME,,
+English Literature,EB,,
+English Literature,CR,,
+English Literature,FE,15,5
+English Literature,MFU,0,0
+English Literature,EFU,0,0
+Digital Media Production,GE,42,14
+Digital Media Production,MR,30,10
+Digital Media Production,ME,18,6
+Digital Media Production,EB,0,0
+Digital Media Production,CR,15,5
+Digital Media Production,FE,15,5
+Digital Media Production,MFU,0,0
+Digital Media Production,EFU,0,0
+Visual Communication,GE,42,14
+Visual Communication,MR,30,10
+Visual Communication,ME,18,6
+Visual Communication,EB,0,0
+Visual Communication,CR,15,5
+Visual Communication,FE,15,5
+Visual Communication,MFU,0,0
+Visual Communication,EFU,0,0
+Electrical Engineering,GE,61,23
+Electrical Engineering,MR,35,15
+Electrical Engineering,ME,15,5
+Electrical Engineering,EB,17,7
+Electrical Engineering,CR,0,0
+Electrical Engineering,FE,0,0
+Electrical Engineering,MFU,0,0
+Electrical Engineering,EFU,0,0
+Computer Engineering,GE,58,22
+Computer Engineering,MR,47,21
+Computer Engineering,ME,9,3
+Computer Engineering,EB,14,6
+Computer Engineering,CR,0,0
+Computer Engineering,FE,0,0
+Computer Engineering,MFU,0,0
+Computer Engineering,EFU,0,0
+Engineering Management,GE,64,24
+Engineering Management,MR,30,10
+Engineering Management,ME,15,5
+Engineering Management,EB,19,8
+Engineering Management,CR,0,0
+Engineering Management,FE,0,0
+Engineering Management,MFU,0,0
+Engineering Management,EFU,0,0
