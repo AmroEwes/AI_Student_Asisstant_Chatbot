@@ -2,4 +2,4 @@ pandas==2.3.0
 streamlit==1.46.1
 python-dotenv==1.1.1
 openai==1.93.0
-gpt4all==2.8.2
+gpt4all==2.7.0
