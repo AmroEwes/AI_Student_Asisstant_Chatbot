@@ -1,16 +1,9 @@
 import os, time, ast, pandas as pd, streamlit as st
-from dotenv import load_dotenv
 from openai import OpenAI
-from gpt4all import GPT4All
 
 # ───────────── 0.  MODEL BACKEND TOGGLE ─────────────
 MODEL_OPTIONS = {
-    "OpenAI GPT-4": "openai",
-    "Mistral 7B (mistral-7b-instruct)": "mistral-7b-instruct-v0.1.Q4_K_M.gguf",
-    "Nous Hermes 2 (Mistral 7B)": "nous-hermes-2-mistral-7b-dpo.Q4_K_M.gguf",
-    "MythoMax L2 (LLaMA 13B)": "mythomax-l2-13b.Q4_K_M.gguf",
-    "OpenHermes 2.5 (Mistral 7B)": "openhermes-2.5-mistral-7b.Q4_K_M.gguf"
-}
+    "OpenAI GPT-4": "openai"}
 MODEL_LABELS = list(MODEL_OPTIONS.keys())
 SELECTED_MODEL_LABEL = st.sidebar.selectbox("Model Backend", MODEL_LABELS, index=0)
 SELECTED_MODEL = MODEL_OPTIONS[SELECTED_MODEL_LABEL]
@@ -54,16 +47,16 @@ st.markdown("""
 
 
 # ───────────── 2.  LOAD FILES ─────────────
-df_major  = pd.read_csv("docs/MajorSheet.csv")
+df_major  = pd.read_csv("MajorSheet.csv")
 df_major["Course_ID"] = df_major["Course_ID"].astype(str).str.strip().str.upper()
-req_df    = pd.read_csv("docs/Major_Sheet_Requirements.csv")
+req_df    = pd.read_csv("Major_Sheet_Requirements.csv")
 
-master_df   = pd.read_csv("docs/Students_Master_Data.csv", dtype={"StudentID": str})
-enroll_df   = pd.read_csv("docs/Students_Enrollment_Data.csv", dtype={"StudentID": str})
-progress_df = pd.read_csv("docs/student_progress.csv", dtype={"Student_ID": str})
-elig_list   = pd.read_csv("docs/Eligible_Course_List.csv", dtype={"Student_ID": str})
-elig_det    = pd.read_csv("docs/Eligible_Course_Details.csv", dtype={"Student_ID": str})
-schedule_df = pd.read_csv("docs/Current_Schedule_Data.csv")
+master_df   = pd.read_csv("Students_Master_Data.csv", dtype={"StudentID": str})
+enroll_df   = pd.read_csv("Students_Enrollment_Data.csv", dtype={"StudentID": str})
+progress_df = pd.read_csv("student_progress.csv", dtype={"Student_ID": str})
+elig_list   = pd.read_csv("Eligible_Course_List.csv", dtype={"Student_ID": str})
+elig_det    = pd.read_csv("Eligible_Course_Details.csv", dtype={"Student_ID": str})
+schedule_df = pd.read_csv("Current_Schedule_Data.csv")
 schedule_df["CourseID"] = schedule_df["CourseID"].astype(str).str.strip().str.upper()
 current_semester = schedule_df["Semester"].max()   # or hard-code, e.g. 2403
 
@@ -93,27 +86,22 @@ area_map = {
     }
 
 # ───────────── 4.  MODEL LOADING ─────────────
+# --- User API Key Input ---
 if SELECTED_MODEL == "openai":
-    load_dotenv()
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-else:
-    MODEL_PATH = os.path.join(os.getcwd(), "models", SELECTED_MODEL)
-    @st.cache_resource(show_spinner=f"Loading {SELECTED_MODEL_LABEL} model...")
-    def load_gpt4all_model(model_path):
-        return GPT4All(model_path)
-    gpt4all_model = load_gpt4all_model(MODEL_PATH)
+    user_api_key = st.sidebar.text_input(
+        "Enter your OpenAI API Key",
+        type="password",
+        placeholder="sk-...",
+        help="You need an OpenAI API key to use GPT features."
+    )
 
-def local_gpt4all(prompt, max_tokens=512):
-    with gpt4all_model.chat_session():
-        response = gpt4all_model.generate(
-            prompt,
-            max_tokens=max_tokens,
-            temp=0.7,
-            top_p=0.95,
-            n_batch=8,
-            streaming=False
-        )
-    return response.strip()
+    if not user_api_key:
+        st.warning("⚠️ Please enter your OpenAI API key to use GPT features.")
+        client = None
+    else:
+        client = OpenAI(api_key=user_api_key)
+else:
+    client = None
 
 # ───────────── 4.  OPENAI/GPT4ALL GPT FUNCTIONS ─────────────
 def gpt_explain_course(row, major_name):
@@ -143,12 +131,14 @@ def gpt_explain_course(row, major_name):
     # Prepend advisor_prompt to system prompt
     full_sys = advisor_prompt + "\n\n" + sys
     prompt = f"System: {full_sys}\nUser: {usr}\nAssistant:"
+    if SELECTED_MODEL == "openai" and not client:
+        return "❌ GPT features are unavailable until you enter a valid OpenAI API key in the sidebar."
+    
     if SELECTED_MODEL == "openai":
         resp = client.chat.completions.create(model="gpt-4-turbo",
             messages=[{"role":"system","content":full_sys},{"role":"user","content":usr}])
         return resp.choices[0].message.content
-    else:
-        return local_gpt4all(prompt)
+
 
 # ───────────── 5.  HELPER FUNCTIONS ─────────────
 def student_profile_text(sid):
@@ -297,6 +287,11 @@ RECOMMENDATION RULES:
 • **ENGL110 - English Composition I** – justification...
 • **GEOL101 - Earth Science** – justification...
 """
+    
+    
+    if SELECTED_MODEL == "openai" and not client:
+        return "❌ GPT features are unavailable until you enter a valid OpenAI API key in the sidebar."
+    
     if SELECTED_MODEL == "openai":
         response = client.chat.completions.create(
             model="gpt-4-turbo",
@@ -306,9 +301,7 @@ RECOMMENDATION RULES:
             ]
         )
         return response.choices[0].message.content
-    else:
-        prompt = f"System: You are a helpful academic advisor.\nUser: {user_prompt}\nAssistant:"
-        return local_gpt4all(prompt)
+
 
 # ───────────── 6.  CHAT-STYLE UI ─────────────
 # === Greeting Message (only once using session_state) ===
@@ -421,20 +414,25 @@ for msg in st.session_state.chat_history:
 
 # === Free-form chat input (in addition to menu/buttons) ===
 user_input = st.chat_input("Ask me anything about your academic progress, courses, or university policies...")
+
 if user_input:
     st.session_state.chat_history.append({"role": "user", "content": user_input})
+
     with st.spinner("🤖 Thinking..."):
         if SELECTED_MODEL == "openai":
-            resp = client.chat.completions.create(
-                model="gpt-4-turbo",
-                messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.chat_history if m["role"] in ("user", "assistant")]
-            )
-            answer = resp.choices[0].message.content
-        else:
-            # For local models, concatenate chat history for context (last 4 turns)
-            history = st.session_state.chat_history[-4:]
-            prompt = "\n".join([f"{m['role'].capitalize()}: {m['content']}" for m in history]) + "\nAssistant:"
-            answer = local_gpt4all(prompt)
+            if client is None:  # no key provided
+                answer = "❌ GPT features are unavailable until you enter a valid OpenAI API key in the sidebar."
+            else:
+                resp = client.chat.completions.create(
+                    model="gpt-4-turbo",
+                    messages=[
+                        {"role": m["role"], "content": m["content"]}
+                        for m in st.session_state.chat_history
+                        if m["role"] in ("user", "assistant")
+                    ]
+                )
+                answer = resp.choices[0].message.content
+
     st.session_state.chat_history.append({"role": "assistant", "content": answer})
     st.rerun()
 
